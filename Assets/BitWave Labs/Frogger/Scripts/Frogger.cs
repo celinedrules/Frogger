@@ -12,8 +12,13 @@ namespace BitWave_Labs.Frogger.Scripts
         [SerializeField] private Sprite deathSprite;
         
         private SpriteRenderer _spriteRenderer;
+        private Vector3 _spawnPosition;
 
-        private void Start() => _spriteRenderer = GetComponent<SpriteRenderer>();
+        private void Start()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _spawnPosition = transform.position;
+        }
 
         [UsedImplicitly]
         public void Move(InputAction.CallbackContext context)
@@ -84,11 +89,24 @@ namespace BitWave_Labs.Frogger.Scripts
 
         private void Die()
         {
+            StopAllCoroutines();
             transform.rotation = Quaternion.identity;
             _spriteRenderer.sprite = deathSprite;
             enabled = false;
+            
+            Invoke(nameof(Respawn), 1.0f);
         }
 
+        public void Respawn()
+        {
+            StopAllCoroutines();
+            transform.rotation = Quaternion.identity;
+            transform.position = _spawnPosition;
+            _spriteRenderer.sprite = idleSprite;
+            gameObject.SetActive(true);
+            enabled = true;
+        }
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (transform.parent)

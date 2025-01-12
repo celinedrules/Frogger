@@ -11,8 +11,13 @@ namespace BitWave_Labs.Frogger.Scripts
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.CompareTag("Player"))
-                enabled = true;
+            if (!other.CompareTag("Player"))
+                return;
+            
+            enabled = true;
+            Frogger frogger = other.GetComponent<Frogger>();
+            frogger.gameObject.SetActive(false);
+            frogger.Invoke(nameof(frogger.Respawn), 1.0f);
         }
     }
 }
