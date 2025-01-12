@@ -1,9 +1,20 @@
+using System.Collections;
 using UnityEngine;
 
 namespace BitWave_Labs.Frogger.Scripts
 {
     public class Frogger : MonoBehaviour
     {
+        [SerializeField] private Sprite idleSprite;
+        [SerializeField] private Sprite leapSprite;
+        
+        private SpriteRenderer _spriteRenderer;
+
+        private void Start()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
@@ -30,12 +41,32 @@ namespace BitWave_Labs.Frogger.Scripts
 
         private void Move(Vector3 direction)
         {
-            transform.position += direction;
+            Vector3 destination = transform.position + direction;
+            StartCoroutine(Leap(destination));
         }
 
         private void Rotate(float x, float y, float z)
         {
             transform.rotation = Quaternion.Euler(new Vector3(x, y, z));
+        }
+
+        private IEnumerator Leap(Vector3 destination)
+        {
+            Vector3 startPosition = transform.position;
+            float elapsed = 0;
+            const float duration = 0.125f;
+
+            _spriteRenderer.sprite = leapSprite;
+
+            while (elapsed < duration)
+            {
+                transform.position = Vector3.Lerp(startPosition, destination, elapsed / duration);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            
+            transform.position = destination;
+            _spriteRenderer.sprite = idleSprite;
         }
     }
 }
