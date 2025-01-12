@@ -13,8 +13,9 @@ namespace BitWave_Labs.Frogger.Scripts
         
         private SpriteRenderer _spriteRenderer;
         private Vector3 _spawnPosition;
+        private float _farthestRow;
 
-        private void Start()
+        private void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _spawnPosition = transform.position;
@@ -43,6 +44,12 @@ namespace BitWave_Labs.Frogger.Scripts
             }
             else
             {
+                if(destination.y > _farthestRow)
+                {
+                    _farthestRow = destination.y;
+                    FindFirstObjectByType<GameManager>().AdvancedRow();
+                }
+                
                 StartCoroutine(Leap(destination));
             }
         }
@@ -87,7 +94,7 @@ namespace BitWave_Labs.Frogger.Scripts
             _spriteRenderer.sprite = idleSprite;
         }
 
-        private void Die()
+        public void Die()
         {
             StopAllCoroutines();
             transform.rotation = Quaternion.identity;
@@ -102,6 +109,7 @@ namespace BitWave_Labs.Frogger.Scripts
             StopAllCoroutines();
             transform.rotation = Quaternion.identity;
             transform.position = _spawnPosition;
+            _farthestRow = _spawnPosition.y;
             _spriteRenderer.sprite = idleSprite;
             gameObject.SetActive(true);
             enabled = true;
