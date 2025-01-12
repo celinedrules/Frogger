@@ -277,6 +277,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4001866540410314576}
+  - component: {fileID: -6179096037339121468}
   m_Layer: 0
   m_Name: Log6
   m_TagString: Untagged
@@ -305,6 +306,21 @@ Transform:
   - {fileID: 8498433055100387431}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6179096037339121468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1744312128958596051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47b9c28fe1f20ee41928017fadf877f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  direction: {x: 1, y: 0}
+  speed: 3
+  size: 6
 --- !u!1 &4425915619064066245
 GameObject:
   m_ObjectHideFlags: 0
