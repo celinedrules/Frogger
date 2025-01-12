@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace BitWave_Labs.Frogger.Scripts
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private GameObject gameOverMenu;
         private Frogger _frogger;
         private Home[] _homes;
         private int _score;
@@ -30,6 +32,7 @@ namespace BitWave_Labs.Frogger.Scripts
 
         private void NewGame()
         {
+            gameOverMenu.SetActive(false);
             SetScore(0);
             SetLives(StartingLives);
             NewLevel();
@@ -77,7 +80,32 @@ namespace BitWave_Labs.Frogger.Scripts
 
         private void GameOver()
         {
+            _frogger.gameObject.SetActive(false);
+            gameOverMenu.SetActive(true);
+            StopAllCoroutines();
+            StartCoroutine(PlayAgain());
+        }
+
+        // public void PlayAgain(InputAction.CallbackContext context)
+        // {
+        //     Debug.Log("PlayAgain");
+        //     if(gameOverMenu.activeInHierarchy)
+        //         NewGame();
+        // }
+        
+        private IEnumerator PlayAgain()
+        {
+            bool playAgain = false;
+        
+            while (!playAgain)
+            {
+                if (Keyboard.current.enterKey.wasPressedThisFrame)
+                    playAgain = true;
+                
+                yield return null;
+            }
             
+            NewGame();
         }
         
         public void AdvancedRow()
