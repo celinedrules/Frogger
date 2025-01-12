@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,11 @@ namespace BitWave_Labs.Frogger.Scripts
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI livesText;
+        [SerializeField] private TextMeshProUGUI timeText;
+        [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private GameObject gameOverMenu;
+        
         private Frogger _frogger;
         private Home[] _homes;
         private int _score;
@@ -58,11 +63,13 @@ namespace BitWave_Labs.Frogger.Scripts
         private IEnumerator Timer(int duration)
         {
             _time = duration;
+            timeText.text = _time.ToString();
 
             while (_time > 0)
             {
                 yield return new WaitForSeconds(1);
                 _time--;
+                timeText.text = _time.ToString();
             }
             
             _frogger.Die();
@@ -137,11 +144,13 @@ namespace BitWave_Labs.Frogger.Scripts
         public void SetScore(int score)
         {
             _score = score;
+            scoreText.text = score.ToString();
         }
 
         public void SetLives(int lives)
         {
             _lives = lives;
+            livesText.text = lives.ToString();
         }
     }
 }
