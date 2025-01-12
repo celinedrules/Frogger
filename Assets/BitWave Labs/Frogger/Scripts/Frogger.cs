@@ -101,7 +101,7 @@ namespace BitWave_Labs.Frogger.Scripts
             _spriteRenderer.sprite = deathSprite;
             enabled = false;
             
-            Invoke(nameof(Respawn), 1.0f);
+            FindFirstObjectByType<GameManager>().Died();
         }
 
         public void Respawn()

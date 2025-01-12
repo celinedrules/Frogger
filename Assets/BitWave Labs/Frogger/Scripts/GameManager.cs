@@ -11,6 +11,7 @@ namespace BitWave_Labs.Frogger.Scripts
         private int _score;
         private int _lives;
         private int _time;
+        private const int StartingLives = 3;
         private const int RowAdvancedPoints = 10;
         private const int BonusMultiplier = 20;
         private const int HomeOccupiedPoints = 50;
@@ -30,7 +31,7 @@ namespace BitWave_Labs.Frogger.Scripts
         private void NewGame()
         {
             SetScore(0);
-            SetLives(3);
+            SetLives(StartingLives);
             NewLevel();
         }
 
@@ -41,11 +42,6 @@ namespace BitWave_Labs.Frogger.Scripts
                 home.enabled = false;
             }
 
-            NewRound();
-        }
-
-        private void NewRound()
-        {
             Respawn();
         }
 
@@ -69,6 +65,21 @@ namespace BitWave_Labs.Frogger.Scripts
             _frogger.Die();
         }
 
+        public void Died()
+        {
+            SetLives(_lives -1);
+            
+            if(_lives > 0)
+                Invoke(nameof(Respawn), 1.0f);
+            else
+                Invoke(nameof(GameOver), 1.0f);
+        }
+
+        private void GameOver()
+        {
+            
+        }
+        
         public void AdvancedRow()
         {
             SetScore(_score + RowAdvancedPoints);
@@ -84,11 +95,12 @@ namespace BitWave_Labs.Frogger.Scripts
             if (Cleared())
             {
                 SetScore(_score + LevelClearedPoints);
+                SetLives(_lives + 1);
                 Invoke(nameof(NewLevel), 1.0f);
             }
             else
             {
-                Invoke(nameof(NewRound), 1.0f);
+                Invoke(nameof(Respawn), 1.0f);
             }
         }
 

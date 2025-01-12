@@ -15,7 +15,7 @@ namespace BitWave_Labs.Frogger.Scripts
                 return;
             
             enabled = true;
-            FindAnyObjectByType<GameManager>().HomeOccupied();
+            FindFirstObjectByType<GameManager>().HomeOccupied();
         }
     }
 }
