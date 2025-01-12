@@ -1,5 +1,7 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace BitWave_Labs.Frogger.Scripts
 {
@@ -13,33 +15,13 @@ namespace BitWave_Labs.Frogger.Scripts
 
         private void Start() => _spriteRenderer = GetComponent<SpriteRenderer>();
 
-        private void Update()
+        [UsedImplicitly]
+        public void Move(InputAction.CallbackContext context)
         {
-            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                Rotate(0, 0, 0);
-                Move(Vector3.up);
-            }
-            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                Rotate(0, 0, 180);
-                Move(Vector3.down);
-            }
-            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                Rotate(0, 0, 90);
-                Move(Vector3.left);
-            }
-            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                Rotate(0, 1, -90);
-                Move(Vector3.right);
-            }
-        }
-
-        private void Move(Vector3 direction)
-        {
-            Vector3 destination = transform.position + direction;
+            if(!context.performed)
+                return;
+            
+            Vector2 destination = (Vector2)transform.position + context.ReadValue<Vector2>();
 
             if(Physics2D.OverlapBox(destination, Vector2.zero, 0.0f, LayerMask.GetMask("Barrier")))
                 return;
@@ -59,10 +41,26 @@ namespace BitWave_Labs.Frogger.Scripts
                 StartCoroutine(Leap(destination));
             }
         }
-
-        private void Rotate(float x, float y, float z)
+        
+        [UsedImplicitly]
+        public void Rotate(InputAction.CallbackContext context)
         {
-            transform.rotation = Quaternion.Euler(new Vector3(x, y, z));
+            if(!context.performed)
+                return;
+            
+            Vector2 input = context.ReadValue<Vector2>();
+
+            transform.rotation = input.y switch
+            {
+                > 0 => Quaternion.Euler(0, 0, 0),
+                < 0 => Quaternion.Euler(0, 0, 180),
+                _ => input.x switch
+                {
+                    > 0 => Quaternion.Euler(0, 0, -90),
+                    < 0 => Quaternion.Euler(0, 0, 90),
+                    _ => transform.rotation
+                }
+            };
         }
 
         private IEnumerator Leap(Vector3 destination)
