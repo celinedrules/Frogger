@@ -15,9 +15,7 @@ namespace BitWave_Labs.Frogger.Scripts
                 return;
             
             enabled = true;
-            Frogger frogger = other.GetComponent<Frogger>();
-            frogger.gameObject.SetActive(false);
-            frogger.Invoke(nameof(frogger.Respawn), 1.0f);
+            FindAnyObjectByType<GameManager>().HomeOccupied();
         }
     }
 }
