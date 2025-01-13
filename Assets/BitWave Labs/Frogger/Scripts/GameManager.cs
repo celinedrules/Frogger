@@ -78,11 +78,7 @@ namespace BitWave_Labs.Frogger.Scripts
         public void Died()
         {
             SetLives(_lives -1);
-            
-            if(_lives > 0)
-                Invoke(nameof(Respawn), 1.0f);
-            else
-                Invoke(nameof(GameOver), 1.0f);
+            Invoke(_lives > 0 ? nameof(Respawn) : nameof(GameOver), 1.0f);
         }
 
         private void GameOver()
@@ -141,13 +137,13 @@ namespace BitWave_Labs.Frogger.Scripts
 
         private bool Cleared() => _homes.All(home => home.enabled);
 
-        public void SetScore(int score)
+        private void SetScore(int score)
         {
             _score = score;
             scoreText.text = score.ToString();
         }
 
-        public void SetLives(int lives)
+        private void SetLives(int lives)
         {
             _lives = lives;
             livesText.text = lives.ToString();
