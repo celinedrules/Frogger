@@ -11,12 +11,14 @@ namespace BitWave_Labs.Frogger.Scripts
         [SerializeField] private Sprite leapSprite;
         [SerializeField] private Sprite deathSprite;
         
+        private GameManager _gameManager;
         private SpriteRenderer _spriteRenderer;
         private Vector3 _spawnPosition;
         private float _farthestRow;
 
         private void Awake()
         {
+            _gameManager = FindFirstObjectByType<GameManager>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _spawnPosition = transform.position;
         }
@@ -47,7 +49,7 @@ namespace BitWave_Labs.Frogger.Scripts
                 if(destination.y > _farthestRow)
                 {
                     _farthestRow = destination.y;
-                    FindFirstObjectByType<GameManager>().AdvancedRow();
+                    _gameManager?.AdvancedRow();
                 }
                 
                 StartCoroutine(Leap(destination));
@@ -101,7 +103,7 @@ namespace BitWave_Labs.Frogger.Scripts
             _spriteRenderer.sprite = deathSprite;
             enabled = false;
             
-            FindFirstObjectByType<GameManager>().Died();
+            _gameManager?.Died();
         }
 
         public void Respawn()

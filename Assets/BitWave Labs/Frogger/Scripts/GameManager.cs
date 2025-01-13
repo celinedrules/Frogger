@@ -8,6 +8,7 @@ namespace BitWave_Labs.Frogger.Scripts
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private PlayerInput playerInput;
         [SerializeField] private TextMeshProUGUI livesText;
         [SerializeField] private TextMeshProUGUI timeText;
         [SerializeField] private TextMeshProUGUI scoreText;
@@ -85,29 +86,15 @@ namespace BitWave_Labs.Frogger.Scripts
         {
             _frogger.gameObject.SetActive(false);
             gameOverMenu.SetActive(true);
-            StopAllCoroutines();
-            StartCoroutine(PlayAgain());
+            playerInput.SwitchCurrentActionMap("UI");
         }
 
-        // public void PlayAgain(InputAction.CallbackContext context)
-        // {
-        //     Debug.Log("PlayAgain");
-        //     if(gameOverMenu.activeInHierarchy)
-        //         NewGame();
-        // }
-        
-        private IEnumerator PlayAgain()
+        public void PlayAgain(InputAction.CallbackContext context)
         {
-            bool playAgain = false;
-        
-            while (!playAgain)
-            {
-                if (Keyboard.current.enterKey.wasPressedThisFrame)
-                    playAgain = true;
-                
-                yield return null;
-            }
+            if (!gameOverMenu.activeInHierarchy)
+                return;
             
+            playerInput.SwitchCurrentActionMap("Player");
             NewGame();
         }
         
